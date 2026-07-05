@@ -1,0 +1,243 @@
+.page {
+  max-width: 1100px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 4px 0 0;
+}
+
+.error {
+  color: #e74c3c;
+  background: #fef0ef;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.loading {
+  text-align: center;
+  color: #999;
+  padding: 60px;
+  font-size: 14px;
+}
+
+/* Overview Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cardHighlight {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.cardHighlight .cardLabel {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cardHighlight .cardValue {
+  color: #fff;
+}
+
+.cardIcon {
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.cardHighlight .cardIcon {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.cardLabel {
+  font-size: 13px;
+  color: #999;
+  margin: 0;
+}
+
+/* Section */
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 12px;
+}
+
+/* Trend Chart */
+.trendCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.emptyTrend {
+  text-align: center;
+  padding: 40px;
+  color: #bbb;
+  font-size: 14px;
+}
+
+.trendChart {
+  display: flex;
+  gap: 8px;
+  height: 240px;
+}
+
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 8px 20px 0;
+  font-size: 11px;
+  color: #bbb;
+  min-width: 24px;
+  text-align: right;
+}
+
+.bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  border-left: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding-left: 4px;
+  padding-bottom: 0;
+  overflow-x: auto;
+}
+
+.barCol {
+  flex: 1;
+  min-width: 28px;
+  max-width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.bar {
+  width: 100%;
+  max-width: 28px;
+  background: linear-gradient(180deg, #667eea 0%, #8899ee 100%);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s;
+  position: relative;
+  min-height: 2px;
+}
+
+.barToday {
+  background: linear-gradient(180deg, #764ba2 0%, #9655c4 100%);
+}
+
+.barValue {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #666;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.barDate {
+  font-size: 10px;
+  color: #bbb;
+  margin-top: 4px;
+  white-space: nowrap;
+  transform: rotate(-30deg);
+  transform-origin: left;
+}
+
+/* Today Grid */
+.todayGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.todayItem {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.todayLabel {
+  font-size: 13px;
+  color: #999;
+}
+
+.todayValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+}

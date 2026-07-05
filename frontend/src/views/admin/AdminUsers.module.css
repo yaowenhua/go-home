@@ -1,0 +1,259 @@
+.page {
+  max-width: 1100px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 4px 0 0;
+}
+
+/* Search */
+.searchBar {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 14px 10px 40px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  border-color: #667eea;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+}
+
+.error {
+  color: #e74c3c;
+  background: #fef0ef;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.loading {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+  font-size: 14px;
+}
+
+/* Table */
+.tableWrapper {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #f5f5f5;
+  cursor: pointer;
+}
+
+.table tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.emptyCell {
+  text-align: center !important;
+  color: #bbb !important;
+  padding: 40px 16px !important;
+}
+
+/* Badges */
+.roleBadge {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: #e8f4fd;
+  color: #3498db;
+  font-weight: 500;
+}
+
+.roleAdmin {
+  background: #fef0e6;
+  color: #e67e22;
+}
+
+.statusBadge {
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.statusActive {
+  background: #e8f8e8;
+  color: #27ae60;
+}
+
+.statusDisabled {
+  background: #fef0ef;
+  color: #e74c3c;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 6px;
+}
+
+.actionBtn {
+  padding: 5px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 12px;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.actionBtn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionDanger {
+  color: #e74c3c;
+  border-color: #f5c6cb;
+}
+
+.actionDanger:hover {
+  border-color: #e74c3c;
+  background: #fef0ef;
+}
+
+.actionSuccess {
+  color: #27ae60;
+  border-color: #b8e6b8;
+}
+
+.actionSuccess:hover {
+  border-color: #27ae60;
+  background: #e8f8e8;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding: 12px 4px;
+}
+
+.paginationInfo {
+  font-size: 13px;
+  color: #888;
+}
+
+.paginationBtns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pageBtn {
+  padding: 6px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageBtn:not(:disabled):hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.pageNum {
+  padding: 6px 10px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+  border-radius: 4px;
+  min-width: 28px;
+  text-align: center;
+}
+
+.pageNum:hover {
+  background: #f0f0ff;
+}
+
+.pageNumActive {
+  background: #667eea;
+  color: #fff;
+  font-weight: 600;
+}
+
+.pageNumActive:hover {
+  background: #5a6fd6;
+}

@@ -3,11 +3,14 @@ import { ref, computed, watch, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { useAppStore } from '../stores/app'
+import { useAuthStore } from '../stores/auth'
 import styles from './Settings.module.css'
 
 const router = useRouter()
 const store = useAppStore()
+const authStore = useAuthStore()
 
+// ============ Profile State ============
 const name = ref(store.user?.name || '')
 const birthDate = ref(store.user?.birthDate || '')
 const localLifeExpectancy = ref(store.lifeExpectancy || 80)
@@ -36,6 +39,75 @@ const remainingDays = computed(() => {
   return Math.max(0, diff)
 })
 
+// ============ Change Password ============
+const showChangePassword = ref(false)
+const passwordForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+})
+const passwordError = ref('')
+const passwordSuccess = ref('')
+const changingPassword = ref(false)
+
+function toggleChangePassword() {
+  showChangePassword.value = !showChangePassword.value
+  passwordError.value = ''
+  passwordSuccess.value = ''
+  passwordForm.value = { oldPassword: '', newPassword: '', confirmPassword: '' }
+}
+
+async function handleChangePassword() {
+  passwordError.value = ''
+  passwordSuccess.value = ''
+
+  if (!passwordForm.value.oldPassword) {
+    passwordError.value = '请输入旧密码'
+    return
+  }
+  if (!passwordForm.value.newPassword || passwordForm.value.newPassword.length < 6) {
+    passwordError.value = '新密码至少6位'
+    return
+  }
+  if (passwordForm.value.newPassword !== passwordForm.value.confirmPassword) {
+    passwordError.value = '两次密码输入不一致'
+    return
+  }
+  if (passwordForm.value.oldPassword === passwordForm.value.newPassword) {
+    passwordError.value = '新密码不能与旧密码相同'
+    return
+  }
+
+  changingPassword.value = true
+  try {
+    await authStore.changePassword(passwordForm.value.oldPassword, passwordForm.value.newPassword)
+    passwordSuccess.value = '密码修改成功！请使用新密码重新登录'
+    setTimeout(() => {
+      authStore.logout()
+      router.push('/login')
+    }, 2000)
+  } catch (err) {
+    passwordError.value = err.message || '修改密码失败'
+  } finally {
+    changingPassword.value = false
+  }
+}
+
+// ============ Logout ============
+const loggingOut = ref(false)
+
+async function handleLogout() {
+  if (!confirm('确定要退出登录吗？')) return
+  loggingOut.value = true
+  try {
+    await authStore.logout()
+    router.push('/login')
+  } catch {
+    loggingOut.value = false
+  }
+}
+
+// ============ Profile Save ============
 function handleSave() {
   error.value = ''
 
@@ -75,8 +147,6 @@ function handleReset() {
     window.location.href = '/onboarding'
   }
 }
-
-
 </script>
 
 <template>
@@ -86,6 +156,75 @@ function handleReset() {
       <p :class="styles.subtitle">管理你的个人信息</p>
     </div>
 
+    <!-- Account Info (V2) -->
+    <div v-if="authStore.isLoggedIn" :class="styles.section">
+      <h2 :class="styles.sectionTitle">账号信息</h2>
+
+      <div :class="styles.infoRow">
+        <span :class="styles.infoLabel">手机号</span>
+        <span :class="styles.infoValue">{{ authStore.user?.phone || '—' }}</span>
+      </div>
+
+      <div :class="styles.infoRow">
+        <span :class="styles.infoLabel">角色</span>
+        <span :class="styles.infoValue">{{ authStore.isAdmin ? '管理员' : '普通用户' }}</span>
+      </div>
+    </div>
+
+    <!-- Change Password (V2) -->
+    <div v-if="authStore.isLoggedIn" :class="styles.section">
+      <div :class="styles.sectionHeader">
+        <h2 :class="styles.sectionTitle">修改密码</h2>
+        <button :class="styles.toggleBtn" @click="toggleChangePassword">
+          {{ showChangePassword ? '取消' : '修改密码' }}
+        </button>
+      </div>
+
+      <div v-if="showChangePassword" :class="styles.passwordForm">
+        <div :class="styles.field">
+          <label :class="styles.label">旧密码</label>
+          <input
+            type="password"
+            :class="styles.input"
+            v-model="passwordForm.oldPassword"
+            placeholder="输入当前密码"
+          />
+        </div>
+
+        <div :class="styles.field">
+          <label :class="styles.label">新密码</label>
+          <input
+            type="password"
+            :class="styles.input"
+            v-model="passwordForm.newPassword"
+            placeholder="至少6位，包含字母和数字"
+          />
+        </div>
+
+        <div :class="styles.field">
+          <label :class="styles.label">确认新密码</label>
+          <input
+            type="password"
+            :class="styles.input"
+            v-model="passwordForm.confirmPassword"
+            placeholder="再次输入新密码"
+          />
+        </div>
+
+        <p v-if="passwordError" :class="styles.error">{{ passwordError }}</p>
+        <p v-if="passwordSuccess" :class="styles.success">{{ passwordSuccess }}</p>
+
+        <button
+          :class="styles.changePwdBtn"
+          :disabled="changingPassword"
+          @click="handleChangePassword"
+        >
+          {{ changingPassword ? '修改中...' : '确认修改' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Profile Info -->
     <div :class="styles.section">
       <h2 :class="styles.sectionTitle">个人信息</h2>
 
@@ -142,7 +281,7 @@ function handleReset() {
 
       <div :class="styles.infoRow">
         <span :class="styles.infoLabel">数据存储</span>
-        <span :class="styles.infoValue">本地存储</span>
+        <span :class="styles.infoValue">云端同步</span>
       </div>
 
       <div :class="styles.infoRow">
@@ -157,6 +296,16 @@ function handleReset() {
 
     <button :class="styles.saveBtn" @click="handleSave">
       {{ saved ? '✓ 已保存' : '保存设置' }}
+    </button>
+
+    <!-- Logout Button (V2) -->
+    <button
+      v-if="authStore.isLoggedIn"
+      :class="styles.logoutBtn"
+      :disabled="loggingOut"
+      @click="handleLogout"
+    >
+      {{ loggingOut ? '退出中...' : '退出登录' }}
     </button>
 
     <button :class="styles.resetBtn" @click="handleReset">

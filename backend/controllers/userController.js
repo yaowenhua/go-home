@@ -1,8 +1,20 @@
+/**
+ * 返乡日记 V2 - 用户控制器
+ *
+ * V2 新增:
+ * - GET /api/users/me - 获取当前登录用户信息（需要认证）
+ * - PUT /api/users/me - 更新当前用户信息（需要认证）
+ * - 原有端点保留兼容，但增加 auth 检查
+ */
+
 const { getDb } = require('../db/database');
 const { nanoid } = require('nanoid');
+const { createError } = require('../middleware/errorHandler');
 
 const userController = {
-  /** POST /api/users - Create user */
+  /**
+   * POST /api/users - Create user（保留 V1 兼容）
+   */
   create(req, res, next) {
     try {
       const { username, name, birthDate, birth_date } = req.body;
@@ -20,7 +32,6 @@ const userController = {
         });
       }
 
-      // Validate date format
       const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
       if (!dateRegex.test(dob)) {
         return res.status(400).json({
@@ -28,7 +39,6 @@ const userController = {
         });
       }
 
-      // Check duplicate username
       const existing = getDb().prepare('SELECT * FROM users WHERE username = ?').get(displayName);
       if (existing) {
         return res.status(409).json({
@@ -53,7 +63,9 @@ const userController = {
     }
   },
 
-  /** GET /api/users - List all users */
+  /**
+   * GET /api/users - List all users（保留 V1 兼容）
+   */
   getAll(req, res, next) {
     try {
       const rows = getDb().prepare('SELECT * FROM users ORDER BY created_at DESC').all();
@@ -63,13 +75,14 @@ const userController = {
     }
   },
 
-  /** GET /api/users/profile - Get or create user profile (frontend-friendly) */
+  /**
+   * GET /api/users/profile - Get or create user profile（保留 V1 兼容）
+   */
   getOrCreateProfile(req, res, next) {
     try {
       const { userId, username } = req.query;
 
       if (userId) {
-        // Search by username
         const user = getDb().prepare('SELECT * FROM users WHERE username = ?').get(userId);
         if (user) {
           return res.json({ success: true, data: normalizeUser(user) });
@@ -79,7 +92,6 @@ const userController = {
         });
       }
 
-      // Return all users if no userId specified
       const rows = getDb().prepare('SELECT * FROM users ORDER BY created_at DESC').all();
       res.json({ success: true, data: rows.map(normalizeUser) });
     } catch (err) {
@@ -87,7 +99,9 @@ const userController = {
     }
   },
 
-  /** PUT /api/users/profile - Update user profile */
+  /**
+   * PUT /api/users/profile - Update user profile（保留 V1 兼容）
+   */
   updateProfile(req, res, next) {
     try {
       const { userId, username, birth_date, birthDate, name } = req.body;
@@ -102,9 +116,8 @@ const userController = {
       const existing = getDb().prepare('SELECT * FROM users WHERE username = ?').get(userIdentifier);
 
       if (!existing) {
-        // Create new user profile
         const id = nanoid();
-        const dob = birth_date || birthDate || existing?.birth_date;
+        const dob = birth_date || birthDate;
         const now = new Date().toISOString();
 
         getDb().prepare(
@@ -115,7 +128,6 @@ const userController = {
         return res.json({ success: true, data: normalizeUser(created) });
       }
 
-      // Update existing
       const updates = {};
       if (birth_date !== undefined) updates.birth_date = birth_date;
       if (birthDate !== undefined) updates.birth_date = birthDate;
@@ -133,7 +145,9 @@ const userController = {
     }
   },
 
-  /** GET /api/users/top - Top users by average rating */
+  /**
+   * GET /api/users/top - Top users by average rating（保留 V1 兼容）
+   */
   getTopUsers(req, res, next) {
     try {
       const rows = getDb()
@@ -163,7 +177,9 @@ const userController = {
     }
   },
 
-  /** GET /api/users/:username - Get single user */
+  /**
+   * GET /api/users/:username - Get user by username（保留 V1 兼容）
+   */
   getByUsername(req, res, next) {
     try {
       const { username } = req.params;
@@ -180,8 +196,106 @@ const userController = {
       next(err);
     }
   },
+
+  // ========== V2 新增端点 ==========
+
+  /**
+   * GET /api/users/me - 获取当前登录用户信息（需要认证）
+   */
+  getMyProfile(req, res, next) {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        return next(createError(401, '未登录'));
+      }
+
+      const user = getDb().prepare(
+        'SELECT id, username, phone, display_name, role, status, birth_date, life_expectancy, last_login_at, created_at FROM users WHERE id = ?'
+      ).get(userId);
+
+      if (!user) {
+        return next(createError(404, '用户不存在'));
+      }
+
+      res.json({
+        success: true,
+        data: {
+          id: user.id,
+          username: user.username,
+          phone: user.phone,
+          display_name: user.display_name,
+          role: user.role,
+          status: user.status,
+          birth_date: user.birth_date,
+          life_expectancy: user.life_expectancy,
+          last_login_at: user.last_login_at,
+          created_at: user.created_at,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  /**
+   * PUT /api/users/me - 更新当前用户信息（需要认证）
+   * Body: { display_name?, birth_date?, life_expectancy? }
+   */
+  updateMyProfile(req, res, next) {
+    try {
+      const userId = req.user?.userId;
+      if (!userId) {
+        return next(createError(401, '未登录'));
+      }
+
+      const { display_name, birth_date, life_expectancy } = req.body;
+      const updates = [];
+      const values = [];
+
+      if (display_name !== undefined) {
+        updates.push('display_name = ?');
+        values.push(display_name);
+      }
+      if (birth_date !== undefined) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(birth_date)) {
+          return next(createError(400, 'birth_date 格式必须为 YYYY-MM-DD'));
+        }
+        updates.push('birth_date = ?');
+        values.push(birth_date);
+      }
+      if (life_expectancy !== undefined) {
+        const le = parseInt(life_expectancy);
+        if (isNaN(le) || le < 50 || le > 150) {
+          return next(createError(400, 'life_expectancy 必须在 50-150 之间'));
+        }
+        updates.push('life_expectancy = ?');
+        values.push(le);
+      }
+
+      if (updates.length === 0) {
+        return next(createError(400, '没有需要更新的字段'));
+      }
+
+      updates.push("updated_at = datetime('now', 'localtime')");
+      values.push(userId);
+
+      getDb().prepare(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`).run(...values);
+
+      // 返回更新后的信息
+      const user = getDb().prepare(
+        'SELECT id, username, phone, display_name, role, status, birth_date, life_expectancy, last_login_at, created_at, updated_at FROM users WHERE id = ?'
+      ).get(userId);
+
+      res.json({ success: true, data: user });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
 
+/**
+ * 标准化用户输出（V1 格式兼容）
+ */
 function normalizeUser(row) {
   return {
     id: row.username,

@@ -41,6 +41,10 @@
   color: var(--color-primary);
 }
 
+.navItem.activeAdmin {
+  color: #e67e22;
+}
+
 .icon {
   font-size: 20px;
   line-height: 1;

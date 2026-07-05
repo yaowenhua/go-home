@@ -1,0 +1,284 @@
+.page {
+  max-width: 800px;
+}
+
+.backLink {
+  display: inline-block;
+  padding: 6px 0;
+  border: none;
+  background: none;
+  color: #667eea;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+.loading {
+  text-align: center;
+  color: #999;
+  padding: 60px 20px;
+  font-size: 14px;
+}
+
+.error {
+  text-align: center;
+  padding: 40px 20px;
+  color: #e74c3c;
+  font-size: 14px;
+}
+
+.retryBtn {
+  margin-top: 12px;
+  padding: 8px 20px;
+  border: 1px solid #e74c3c;
+  border-radius: 8px;
+  background: #fff;
+  color: #e74c3c;
+  cursor: pointer;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.userMeta {
+  flex: 1;
+}
+
+.userName {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.userPhone {
+  font-size: 14px;
+  color: #888;
+  margin: 2px 0 0;
+}
+
+.statusTag {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.statusActive {
+  background: #e8f8e8;
+  color: #27ae60;
+}
+
+.statusDisabled {
+  background: #fef0ef;
+  color: #e74c3c;
+}
+
+.adminTag {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 10px;
+  background: #fef0e6;
+  color: #e67e22;
+  font-weight: 600;
+}
+
+/* Info Grid */
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoLabel {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.infoValue {
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+}
+
+/* Actions */
+.actionCard {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.actionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 16px;
+}
+
+.actionBtns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  padding: 10px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionBtnWarning {
+  padding: 10px 20px;
+  border: 1px solid #f0c040;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  color: #cc8800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.actionBtnWarning:hover {
+  background: #fff8e6;
+}
+
+.actionBtnWarning:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionBtnDanger {
+  color: #e74c3c;
+  border-color: #f5c6cb;
+}
+
+.actionBtnDanger:hover {
+  background: #fef0ef;
+  border-color: #e74c3c;
+}
+
+.actionBtnSuccess {
+  color: #27ae60;
+  border-color: #b8e6b8;
+}
+
+.actionBtnSuccess:hover {
+  background: #e8f8e8;
+  border-color: #27ae60;
+}
+
+.actionHint {
+  font-size: 12px;
+  color: #bbb;
+  margin: 8px 0 0;
+}
+
+/* Activity Log */
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 16px;
+}
+
+.emptyLog {
+  text-align: center;
+  padding: 30px;
+  color: #bbb;
+  font-size: 14px;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+}
+
+.activityItem {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.activityItem:last-child {
+  border-bottom: none;
+}
+
+.activityIcon {
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #f5f5ff;
+  border-radius: 50%;
+}
+
+.activityContent {
+  flex: 1;
+}
+
+.activityText {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+
+.activityTime {
+  font-size: 12px;
+  color: #bbb;
+  margin: 2px 0 0;
+}

@@ -3,10 +3,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { useAppStore } from '../stores/app'
+import { useAuthStore } from '../stores/auth'
 import styles from './Onboarding.module.css'
 
 const router = useRouter()
 const store = useAppStore()
+const authStore = useAuthStore()
 
 const birthDate = ref('')
 const error = ref('')
@@ -117,6 +119,12 @@ function setSlideIndex(i) {
             <polyline points="12 5 19 12 12 19" />
           </svg>
         </button>
+
+        <!-- Login entry for returning users -->
+        <div v-if="!authStore.isLoggedIn" :class="styles.loginLink">
+          <span>已有账号？</span>
+          <router-link to="/login">立即登录</router-link>
+        </div>
       </div>
     </div>
   </div>

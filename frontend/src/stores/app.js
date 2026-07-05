@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import dayjs from 'dayjs'
-import { userApi, entriesApi } from '../api'
+import { entriesApi } from '../api'
+import { useAuthStore } from './auth'
 
 const DEFAULT_LIFE_EXPECTANCY = 80
 const STORAGE_KEY = 'go_home_user'
@@ -96,6 +97,7 @@ export const useAppStore = defineStore('app', () => {
     isLoading.value = true
     try {
       if (userData.username && userData.birthDate) {
+        const { userApi } = await import('../api')
         await userApi.create({
           username: userData.username,
           birthDate: userData.birthDate,
@@ -176,7 +178,7 @@ export const useAppStore = defineStore('app', () => {
     editingEntry.value = null
     saveToStorage(`go_home_entries_${targetDate}`, updated)
 
-    // Async sync to backend
+    // Async sync to backend (JWT token provides user identity)
     try {
       await entriesApi.create({
         content: entry.content,

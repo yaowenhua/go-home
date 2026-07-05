@@ -2,27 +2,58 @@
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from './stores/app'
+import { useAuthStore } from './stores/auth'
 import NavBar from './components/NavBar.vue'
 
 const router = useRouter()
-const store = useAppStore()
+const appStore = useAppStore()
+const authStore = useAuthStore()
 
-onMounted(() => {
-  store.checkOnboarding()
+onMounted(async () => {
+  // Initialize auth (restore from localStorage)
+  await authStore.initialize()
+
+  // Check onboarding
+  appStore.checkOnboarding()
 })
 
-// Navigation guard: redirect un-onboarded users
-router.beforeEach((to, from, next) => {
-  if (!store.isHydrated) {
-    store.checkOnboarding()
+// Navigation guard: redirect based on auth & onboarding state
+router.beforeEach(async (to, from, next) => {
+  // Ensure stores are hydrated
+  if (!authStore.isInitialized) {
+    await authStore.initialize()
   }
-  if (to.meta.requiresAuth && !store.isOnboarded) {
-    next({ name: 'Onboarding' })
-  } else if (to.name === 'Onboarding' && store.isOnboarded) {
-    next({ name: 'Home' })
-  } else {
-    next()
+
+  if (!appStore.isHydrated) {
+    appStore.checkOnboarding()
   }
+
+  // Public paths — always allow
+  const publicPaths = ['/login', '/onboarding']
+  if (publicPaths.includes(to.path)) {
+    // But redirect logged-in users away from /login
+    if (to.path === '/login' && authStore.isLoggedIn) {
+      return next({ path: '/' })
+    }
+    return next()
+  }
+
+  // Check admin routes
+  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    return next({ path: '/' })
+  }
+
+  // Check auth
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+    return next({ path: '/login', query: { redirect: to.fullPath } })
+  }
+
+  // Check onboarding
+  if (to.meta.requiresAuth && !appStore.isOnboarded) {
+    return next({ path: '/onboarding' })
+  }
+
+  next()
 })
 </script>
 
