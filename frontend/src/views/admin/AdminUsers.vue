@@ -160,6 +160,7 @@ function statusLabel(status) {
           <tr>
             <th>手机号</th>
             <th>昵称</th>
+            <th>生日</th>
             <th>角色</th>
             <th>状态</th>
             <th>注册时间</th>
@@ -169,11 +170,12 @@ function statusLabel(status) {
         </thead>
         <tbody>
           <tr v-if="users.length === 0">
-            <td :class="styles.emptyCell" colspan="7">暂无用户数据</td>
+            <td :class="styles.emptyCell" colspan="8">暂无用户数据</td>
           </tr>
           <tr v-for="user in users" :key="user.id" @click="viewDetail(user.id)">
             <td>{{ maskPhone(user.phone) }}</td>
             <td>{{ user.display_name || user.username || '—' }}</td>
+            <td>{{ user.birth_date || '—' }}</td>
             <td>
               <span :class="[styles.roleBadge, user.role === 'admin' && styles.roleAdmin]">
                 {{ user.role === 'admin' ? '管理员' : '用户' }}
