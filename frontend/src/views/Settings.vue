@@ -1,9 +1,10 @@
 <script setup>
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { useAppStore } from '../stores/app'
 import { useAuthStore } from '../stores/auth'
+import { userApi } from '../api'
 import styles from './Settings.module.css'
 
 const router = useRouter()
@@ -11,11 +12,48 @@ const store = useAppStore()
 const authStore = useAuthStore()
 
 // ============ Profile State ============
-const name = ref(store.user?.name || '')
-const birthDate = ref(store.user?.birthDate || '')
-const localLifeExpectancy = ref(store.lifeExpectancy || 80)
+const name = ref('')
+const birthDate = ref('')
+const localLifeExpectancy = ref(80)
 const saved = ref(false)
 const error = ref('')
+const profileLoading = ref(true)
+
+function initProfile() {
+  // 优先从 auth store 取（API 最新数据）
+  const authUser = authStore.user
+  if (authUser?.birth_date) {
+    name.value = authUser.display_name || authUser.username || ''
+    birthDate.value = authUser.birth_date || ''
+    localLifeExpectancy.value = authUser.life_expectancy || 80
+  } else {
+    // fallback: app store 离线数据
+    name.value = store.user?.name || store.user?.display_name || store.user?.username || ''
+    birthDate.value = store.user?.birthDate || store.user?.birth_date || ''
+    localLifeExpectancy.value = store.lifeExpectancy || 80
+  }
+}
+
+onMounted(async () => {
+  // 尝试从 API 刷新用户信息
+  if (authStore.isLoggedIn) {
+    try {
+      const res = await userApi.getMe()
+      const profile = res.data
+      if (profile?.birth_date) {
+        name.value = profile.display_name || profile.username || ''
+        birthDate.value = profile.birth_date
+        localLifeExpectancy.value = profile.life_expectancy || 80
+        profileLoading.value = false
+        return
+      }
+    } catch {
+      // 离线降级
+    }
+  }
+  initProfile()
+  profileLoading.value = false
+})
 
 let savedTimer = null
 watch(saved, (val) => {
@@ -108,8 +146,9 @@ async function handleLogout() {
 }
 
 // ============ Profile Save ============
-function handleSave() {
+async function handleSave() {
   error.value = ''
+  saved.value = false
 
   if (birthDate.value) {
     const birth = dayjs(birthDate.value)
@@ -124,13 +163,28 @@ function handleSave() {
   }
 
   try {
-    if (birthDate.value !== store.user?.birthDate) {
+    // 本机保存（离线降级）
+    if (birthDate.value !== (store.user?.birthDate || store.user?.birth_date)) {
       store.updateProfile({ birthDate: birthDate.value })
     }
-    if (name.value !== store.user?.name) {
+    if (name.value !== (store.user?.name || store.user?.display_name)) {
       store.updateProfile({ name: name.value })
     }
     store.setLifeExpectancy(localLifeExpectancy.value)
+
+    // V2: 同步到服务器
+    if (authStore.isLoggedIn) {
+      try {
+        await userApi.updateMyProfile({
+          display_name: name.value || undefined,
+          birth_date: birthDate.value || undefined,
+          life_expectancy: localLifeExpectancy.value,
+        })
+      } catch (serverErr) {
+        console.warn('Profile sync failed (offline mode):', serverErr.message)
+      }
+    }
+
     saved.value = true
   } catch (err) {
     error.value = '保存失败，请重试'

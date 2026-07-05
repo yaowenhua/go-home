@@ -1,6 +1,12 @@
 import apiClient from './index'
 
 export const userApi = {
+  /** GET /api/users/me — 获取当前用户信息 */
+  getMe: () => apiClient.get('/users/me'),
+
+  /** PUT /api/users/me — 更新当前用户信息 */
+  updateMyProfile: (data) => apiClient.put('/users/me', data),
+
   /** GET /api/users/profile?userId=xxx — 获取用户信息 */
   getProfile: (userId) => apiClient.get(`/users/profile?userId=${userId}`),
 
