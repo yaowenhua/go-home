@@ -21,7 +21,7 @@ const { syncRecordEvent } = require('../middleware/activityLogger')
 async function register(req, res, next) {
   try {
     const db = getDb()
-    const { phone, password } = req.body
+    const { phone, password, display_name, birth_date, life_expectancy } = req.body
 
     // 校验手机号
     if (!phone || !/^\d{11}$/.test(phone)) {
@@ -51,11 +51,16 @@ async function register(req, res, next) {
     // 使用 nanoid 生成 6 位短数字作为默认 username（兼容旧前端）
     const defaultUsername = `user_${Date.now().toString(36)}`
 
+    // 解析输入
+    const userDisplayName = display_name || phone.slice(0, 3) + '****' + phone.slice(-4)
+    const userBirthDate = birth_date || '2000-01-01'
+    const userLifeExpectancy = life_expectancy ? parseInt(life_expectancy) : 80
+
     // 创建用户
     db.prepare(`
-      INSERT INTO users (id, username, phone, password_hash, content_salt, display_name, role, status, birth_date, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'user', 'active', '2000-01-01', ?, ?)
-    `).run(userId, defaultUsername, phone, passwordHash, contentSalt, phone.slice(0, 3) + '****' + phone.slice(-4), now, now)
+      INSERT INTO users (id, username, phone, password_hash, content_salt, display_name, role, status, birth_date, life_expectancy, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, 'user', 'active', ?, ?, ?, ?)
+    `).run(userId, defaultUsername, phone, passwordHash, contentSalt, userDisplayName, userBirthDate, userLifeExpectancy, now, now)
 
     // 派生并缓存加密密钥
     const encryptionKey = keyService.getEncryptionKey(userId, password, contentSalt)
@@ -84,7 +89,9 @@ async function register(req, res, next) {
           phone,
           role: 'user',
           username: defaultUsername,
-          display_name: phone.slice(0, 3) + '****' + phone.slice(-4),
+          display_name: userDisplayName,
+          birth_date: userBirthDate,
+          life_expectancy: userLifeExpectancy,
         },
       },
     })
