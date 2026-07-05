@@ -92,15 +92,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function register(phone, password, name, birthDate, lifeExpectancy) {
+  async function register(phone, password, name) {
     isLoading.value = true
     try {
       const res = await authApi.register({
         phone,
         password,
         display_name: name,
-        birth_date: birthDate,
-        life_expectancy: lifeExpectancy,
       })
       const { accessToken: at, refreshToken: rt, user: u } = res.data
       saveTokens(at, rt)

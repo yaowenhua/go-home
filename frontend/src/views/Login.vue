@@ -31,10 +31,8 @@ const registerForm = reactive({
   password: '',
   confirmPassword: '',
   name: '',
-  birthDate: '',
-  lifeExpectancy: 80,
 })
-const registerErrors = reactive({ phone: '', password: '', confirmPassword: '', name: '', birthDate: '' })
+const registerErrors = reactive({ phone: '', password: '', confirmPassword: '', name: '' })
 const registerSubmitting = ref(false)
 const registerError = ref('')
 
@@ -105,7 +103,6 @@ async function handleRegister() {
   registerErrors.password = ''
   registerErrors.confirmPassword = ''
   registerErrors.name = ''
-  registerErrors.birthDate = ''
   registerError.value = ''
 
   if (!registerForm.phone) {
@@ -129,19 +126,12 @@ async function handleRegister() {
     valid = false
   }
 
-  if (registerForm.birthDate && !/^\d{4}-\d{2}-\d{2}$/.test(registerForm.birthDate)) {
-    registerErrors.birthDate = '格式错误，请用 YYYY-MM-DD'
-    valid = false
-  }
-
   if (!valid) return
 
   registerSubmitting.value = true
   try {
     const name = registerForm.name.trim() || undefined
-    const birthDate = registerForm.birthDate || undefined
-    const lifeExpectancy = registerForm.lifeExpectancy || undefined
-    await authStore.register(registerForm.phone, registerForm.password, name, birthDate, lifeExpectancy)
+    await authStore.register(registerForm.phone, registerForm.password, name)
     router.push('/')
   } catch (err) {
     registerError.value = err.message || '注册失败，请重试'
@@ -365,28 +355,6 @@ import { authApi } from '../api/auth'
             autocomplete="new-password"
           />
           <p v-if="registerErrors.confirmPassword" :class="styles.fieldError">{{ registerErrors.confirmPassword }}</p>
-        </div>
-
-        <div :class="styles.field">
-          <label :class="styles.label">出生日期</label>
-          <input
-            type="date"
-            :class="[styles.input, registerErrors.birthDate && styles.inputError]"
-            v-model="registerForm.birthDate"
-            placeholder="2000-01-01"
-          />
-          <p v-if="registerErrors.birthDate" :class="styles.fieldError">{{ registerErrors.birthDate }}</p>
-        </div>
-
-        <div :class="styles.field">
-          <label :class="styles.label">预期寿命（岁）</label>
-          <input
-            type="number"
-            :class="styles.input"
-            v-model.number="registerForm.lifeExpectancy"
-            min="50"
-            max="150"
-          />
         </div>
 
         <p v-if="registerError" :class="styles.formError">{{ registerError }}</p>
