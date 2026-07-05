@@ -46,8 +46,8 @@ async function fetchUsers() {
       pageSize: pageSize.value,
       search: searchQuery.value || undefined,
     })
-    users.value = res.data.users || []
-    const pagination = res.pagination || res.data?.pagination || {}
+    users.value = res.data || []
+    const pagination = res.pagination || {}
     total.value = pagination.total || 0
     totalPages.value = pagination.totalPages || 1
   } catch (err) {
@@ -91,7 +91,7 @@ async function handleResetPassword(userId) {
 async function handleToggleStatus(user) {
   const newStatus = user.status === 'active' ? 'disabled' : 'active'
   const action = newStatus === 'disabled' ? '禁用' : '启用'
-  if (!confirm(`确定要${action}用户「${user.displayName || user.phone}」吗？`)) return
+  if (!confirm(`确定要${action}用户「${user.display_name || user.phone}」吗？`)) return
 
   actionLoading.value = user.id
   try {
@@ -173,7 +173,7 @@ function statusLabel(status) {
           </tr>
           <tr v-for="user in users" :key="user.id" @click="viewDetail(user.id)">
             <td>{{ maskPhone(user.phone) }}</td>
-            <td>{{ user.displayName || user.username || '—' }}</td>
+            <td>{{ user.display_name || user.username || '—' }}</td>
             <td>
               <span :class="[styles.roleBadge, user.role === 'admin' && styles.roleAdmin]">
                 {{ user.role === 'admin' ? '管理员' : '用户' }}
@@ -184,8 +184,8 @@ function statusLabel(status) {
                 {{ statusLabel(user.status) }}
               </span>
             </td>
-            <td>{{ formatDate(user.createdAt) }}</td>
-            <td>{{ user.lastLoginAt ? formatDate(user.lastLoginAt) : '从未登录' }}</td>
+            <td>{{ formatDate(user.created_at) }}</td>
+            <td>{{ user.last_login_at ? formatDate(user.last_login_at) : '从未登录' }}</td>
             <td @click.stop>
               <div :class="styles.actions">
                 <button

@@ -28,7 +28,7 @@ async function fetchUserDetail() {
   error.value = ''
   try {
     const res = await adminApi.getUser(userId)
-    user.value = res.data || res
+    user.value = res.data?.data || res.data || res
   } catch (err) {
     error.value = err.message || '获取用户信息失败'
   } finally {
@@ -109,10 +109,10 @@ function maskPhone(phone) {
       <div :class="styles.card">
         <div :class="styles.cardHeader">
           <div :class="styles.avatar">
-            {{ (user.displayName || user.phone || '?')[0].toUpperCase() }}
+            {{ (user.display_name || user.phone || '?')[0].toUpperCase() }}
           </div>
           <div :class="styles.userMeta">
-            <h2 :class="styles.userName">{{ user.displayName || user.username || '未设置昵称' }}</h2>
+            <h2 :class="styles.userName">{{ user.display_name || user.username || '未设置昵称' }}</h2>
             <p :class="styles.userPhone">{{ maskPhone(user.phone) }}</p>
           </div>
           <span :class="[styles.statusTag, isActive ? styles.statusActive : styles.statusDisabled]">
@@ -132,19 +132,19 @@ function maskPhone(phone) {
           </div>
           <div :class="styles.infoItem">
             <span :class="styles.infoLabel">注册时间</span>
-            <span :class="styles.infoValue">{{ formatDate(user.createdAt) }}</span>
+            <span :class="styles.infoValue">{{ formatDate(user.created_at) }}</span>
           </div>
           <div :class="styles.infoItem">
             <span :class="styles.infoLabel">最后登录</span>
-            <span :class="styles.infoValue">{{ user.lastLoginAt ? formatDate(user.lastLoginAt) : '从未登录' }}</span>
+            <span :class="styles.infoValue">{{ user.last_login_at ? formatDate(user.last_login_at) : '从未登录' }}</span>
           </div>
           <div :class="styles.infoItem">
             <span :class="styles.infoLabel">出生日期</span>
-            <span :class="styles.infoValue">{{ user.birthDate || '未设置' }}</span>
+            <span :class="styles.infoValue">{{ user.birth_date || '未设置' }}</span>
           </div>
           <div :class="styles.infoItem">
             <span :class="styles.infoLabel">日记数量</span>
-            <span :class="styles.infoValue">{{ user.entryCount ?? '—' }}</span>
+            <span :class="styles.infoValue">{{ user.entry_count ?? '—' }}</span>
           </div>
         </div>
       </div>
