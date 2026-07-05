@@ -54,7 +54,7 @@ function seedAdmin() {
 
   db.prepare(`
     INSERT INTO users (id, username, phone, password_hash, content_salt, display_name, role, status, birth_date, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, 'admin', 'active', '2000-01-01', ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, 'admin', 'active', '1980-01-01', ?, ?)
   `).run(
     adminId,
     '管理员',
