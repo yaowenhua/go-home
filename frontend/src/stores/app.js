@@ -71,16 +71,7 @@ export const useAppStore = defineStore('app', () => {
   }
 
   function checkOnboarding() {
-    const savedUser = loadFromStorage(STORAGE_KEY, null)
-    if (savedUser?.birthDate) {
-      user.value = savedUser
-      isOnboarded.value = true
-      isHydrated.value = true
-      lifeExpectancy.value = savedUser.lifeExpectancy || DEFAULT_LIFE_EXPECTANCY
-      return true
-    }
-
-    // V2: 检查 auth store 的登录用户信息
+    // 优先从 auth store 获取最新 API 数据
     try {
       const authUser = JSON.parse(localStorage.getItem('go_home_user_info') || 'null')
       if (authUser?.birth_date) {
@@ -98,6 +89,16 @@ export const useAppStore = defineStore('app', () => {
       }
     } catch {
       // ignore
+    }
+
+    // fallback: 本地缓存
+    const savedUser = loadFromStorage(STORAGE_KEY, null)
+    if (savedUser?.birthDate) {
+      user.value = savedUser
+      isOnboarded.value = true
+      isHydrated.value = true
+      lifeExpectancy.value = savedUser.lifeExpectancy || DEFAULT_LIFE_EXPECTANCY
+      return true
     }
 
     // Legacy fallback
