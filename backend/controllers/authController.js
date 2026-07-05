@@ -129,7 +129,7 @@ async function login(req, res, next) {
     // 验证密码
     const isValid = bcrypt.compareSync(password, user.password_hash)
     if (!isValid) {
-      return next(createError(401, '手机号或密码错误'))
+      return next(createError(400, '密码错误'))
     }
 
     // 派生并缓存加密密钥
