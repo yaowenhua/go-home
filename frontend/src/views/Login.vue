@@ -252,18 +252,6 @@ import { authApi } from '../api/auth'
         <p :class="styles.subtitle">记录生活的点滴，珍惜当下的时光</p>
       </div>
 
-      <!-- Tabs -->
-      <div :class="styles.tabs">
-        <button
-          v-for="tab in tabs"
-          :key="tab.key"
-          :class="[styles.tab, activeTab === tab.key && styles.tabActive]"
-          @click="switchTab(tab.key)"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
-
       <!-- Login Tab -->
       <form v-if="activeTab === 'login'" :class="styles.form" @submit.prevent="handleLogin">
         <div :class="styles.field">
