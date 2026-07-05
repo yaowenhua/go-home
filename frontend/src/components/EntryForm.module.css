@@ -1,0 +1,210 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  width: 100%;
+  max-width: var(--max-width);
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: var(--space-lg) var(--space-md) calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
+  animation: slideUp 0.3s ease;
+}
+
+.header {
+  position: relative;
+  text-align: center;
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-lg);
+}
+
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-muted);
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.dateInput {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  width: 100%;
+  transition: border-color var(--transition-fast);
+}
+
+.dateInput:focus {
+  border-color: var(--color-primary);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color var(--transition-fast);
+}
+
+.textarea:focus {
+  border-color: var(--color-primary);
+}
+
+.textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.charCount {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+  margin-top: var(--space-xs);
+}
+
+.ratingWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-sm) 0;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.categoryBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-md) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  transition: all var(--transition-fast);
+}
+
+.categoryBtn:hover {
+  border-color: var(--color-border-light);
+  background: var(--color-bg-card-hover);
+}
+
+.categoryActive {
+  border-color: var(--color-primary) !important;
+  background: var(--color-primary) !important;
+  color: #fff !important;
+}
+
+.categoryIcon {
+  font-size: 20px;
+}
+
+.submitBtn {
+  padding: var(--space-md);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  letter-spacing: 1px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--color-primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

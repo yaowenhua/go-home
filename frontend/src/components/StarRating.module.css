@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) 0;
+}
+
+.star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  color: var(--color-star-empty);
+  transition: color var(--transition-fast), transform var(--transition-fast);
+  font-size: 0;
+}
+
+.star.active {
+  color: var(--color-star);
+}
+
+.star.interactive {
+  cursor: pointer;
+}
+
+.star.interactive:hover {
+  transform: scale(1.15);
+}
+
+.star.interactive:active {
+  transform: scale(0.95);
+}
+
+.star.animate {
+  animation: starPop 0.4s ease;
+}
+
+.star:disabled {
+  cursor: default;
+}
+
+.hint {
+  margin-left: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  min-width: 2em;
+  transition: opacity var(--transition-fast);
+}
