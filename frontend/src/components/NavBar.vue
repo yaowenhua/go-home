@@ -20,9 +20,9 @@ const showAdminEntry = computed(() => authStore.isLoggedIn && authStore.isAdmin)
 // Login / user icon — show login when not logged in
 const showLoginEntry = computed(() => !authStore.isLoggedIn)
 
-// Don't show on home page, onboarding, login, or admin pages
+// Don't show on onboarding or login pages
 const showNav = computed(() => {
-  return route.path !== '/' && route.path !== '/onboarding' && route.path !== '/login' && !route.path.startsWith('/admin')
+  return route.path !== '/onboarding' && route.path !== '/login' && !route.path.startsWith('/admin')
 })
 
 function navigate(path) {
