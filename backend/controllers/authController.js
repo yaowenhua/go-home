@@ -118,7 +118,7 @@ async function login(req, res, next) {
 
     // 统一错误提示：不暴露是手机号无效还是密码错误
     if (!user) {
-      return next(createError(401, '手机号或密码错误'))
+      return next(createError(400, '该账号尚未注册，请先注册'))
     }
 
     // 检查用户状态
