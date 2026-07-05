@@ -58,7 +58,7 @@ export const useAppStore = defineStore('app', () => {
   const editingEntry = ref(null)
 
   // ============ Computed ============
-  const birthDate = computed(() => user.value?.birthDate || '')
+  const birthDate = computed(() => user.value?.birthDate || user.value?.birth_date || '')
 
   // ============ Actions ============
 
@@ -79,6 +79,27 @@ export const useAppStore = defineStore('app', () => {
       lifeExpectancy.value = savedUser.lifeExpectancy || DEFAULT_LIFE_EXPECTANCY
       return true
     }
+
+    // V2: 检查 auth store 的登录用户信息
+    try {
+      const authUser = JSON.parse(localStorage.getItem('go_home_user_info') || 'null')
+      if (authUser?.birth_date) {
+        const u = {
+          username: authUser.display_name || authUser.username || 'user',
+          birthDate: authUser.birth_date,
+          lifeExpectancy: authUser.life_expectancy || DEFAULT_LIFE_EXPECTANCY,
+        }
+        saveToStorage(STORAGE_KEY, u)
+        user.value = u
+        isOnboarded.value = true
+        isHydrated.value = true
+        lifeExpectancy.value = u.lifeExpectancy
+        return true
+      }
+    } catch {
+      // ignore
+    }
+
     // Legacy fallback
     const legacyBirthDate = loadFromStorage('return_home_birth_date', null)
     if (legacyBirthDate) {
