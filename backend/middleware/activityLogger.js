@@ -26,6 +26,7 @@ let batchTimer = null
  * @param {boolean} [options.rateLimited=false] - 是否启用频控
  * @param {boolean} [options.async=false] - 是否异步批量记录
  * @param {object} [options.metadata] - 附加元数据
+ * @param {boolean} [options.pathFromBody=false] - 为 true 时，落库的 path 与 metadata.path 取 req.body.path（用于 page_view 等需记录前端路由 path 的场景；频控 key 仍用 originalUrl）
  * @returns {function} Express 中间件
  *
  * 使用示例：
@@ -33,13 +34,16 @@ let batchTimer = null
  *   router.post('/login', logActivity('login'), authController.login)
  */
 function logActivity(eventType, options = {}) {
-  const { rateLimited = false, async = false, metadata: extraMetadata = {} } = options
+  const { rateLimited = false, async = false, metadata: extraMetadata = {}, pathFromBody = false } = options
 
   return (req, res, next) => {
     // 频控检查
     if (rateLimited) {
       const userId = req.user?.userId || 'anonymous'
-      const rateKey = `${eventType}:${userId}:${req.originalUrl}`
+      // 频控维度：pathFromBody 开启时按「前端路由 path」区分（每用户每页面 5min 不重复，RD-A2.1），
+      // 否则用 originalUrl。不同页面可分别计数，同一页面不重复。
+      const rateDim = pathFromBody ? req.body?.path || req.originalUrl : req.originalUrl
+      const rateKey = `${eventType}:${userId}:${rateDim}`
       const lastLog = rateLimitCache.get(rateKey)
       const cooldown = eventType === 'page_view' ? PAGE_VIEW_COOLDOWN : API_CALL_COOLDOWN
 
@@ -57,10 +61,15 @@ function logActivity(eventType, options = {}) {
       const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || ''
       const userAgent = req.headers['user-agent'] || ''
 
+      // 记录前端路由 path（pathFromBody 开启时取 req.body.path），否则用 originalUrl
+      const bodyPath = pathFromBody ? req.body?.path || null : null
+      const recordPath = bodyPath !== null ? bodyPath : req.originalUrl
+
       const metadata = JSON.stringify({
         method: req.method,
         path: req.originalUrl,
         statusCode: res.statusCode,
+        ...(bodyPath !== null ? { frontendPath: bodyPath } : {}),
         ...extraMetadata,
       })
 
@@ -71,7 +80,7 @@ function logActivity(eventType, options = {}) {
           event_type: eventType,
           ip_address: ipAddress,
           user_agent: userAgent,
-          path: req.originalUrl,
+          path: recordPath,
           metadata,
           created_at: new Date().toISOString(),
         })
@@ -85,7 +94,7 @@ function logActivity(eventType, options = {}) {
           db.prepare(`
             INSERT INTO activity_log (user_id, event_type, ip_address, user_agent, path, metadata)
             VALUES (?, ?, ?, ?, ?, ?)
-          `).run(userId, eventType, ipAddress, userAgent, req.originalUrl, metadata)
+          `).run(userId, eventType, ipAddress, userAgent, recordPath, metadata)
         } catch (err) {
           console.error('[ActivityLog] record failed:', err.message)
         }

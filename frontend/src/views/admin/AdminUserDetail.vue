@@ -15,8 +15,44 @@ const loading = ref(true)
 const error = ref('')
 const actionLoading = ref(false)
 
-// ============ Activity Log (mock for now) ============
+// ============ Activity Log ============
 const activities = ref([])
+const activitiesLoading = ref(false)
+const activitiesLoaded = ref(false)
+const activitiesError = ref('')
+
+// 重置密码二次确认弹窗
+const showResetConfirm = ref(false)
+function openResetConfirm() {
+  showResetConfirm.value = true
+}
+function cancelResetConfirm() {
+  showResetConfirm.value = false
+}
+
+// 行为类型 → 展示文案/图标映射（DD-B1.2）
+const ACTIVITY_TYPE_MAP = {
+  login: { text: '登录', icon: '🔑' },
+  register: { text: '注册', icon: '📝' },
+  entry_create: { text: '写日记', icon: '✍️' },
+  entry_update: { text: '更新日记', icon: '🔄' },
+  entry_delete: { text: '删除日记', icon: '🗑️' },
+  page_view: { text: '浏览页面', icon: '👀' },
+  api_call: { text: '接口访问', icon: '⚙️' },
+  change_password: { text: '修改密码', icon: '🔒' },
+  default: { text: '行为记录', icon: '📌' },
+}
+
+function mapActivity(item) {
+  const type = item.event_type
+  const label = ACTIVITY_TYPE_MAP[type] || ACTIVITY_TYPE_MAP.default
+  return {
+    type,
+    text: label.text,
+    time: item.created_at,
+    icon: label.icon,
+  }
+}
 
 // ============ Computed ============
 const isAdmin = computed(() => user.value?.role === 'admin')
@@ -36,14 +72,35 @@ async function fetchUserDetail() {
   }
 }
 
+// B1: 拉取用户真实活动日志（与用户信息并行，独立 loading，不阻塞整页）
+async function fetchUserActivity() {
+  activitiesLoading.value = true
+  activitiesError.value = ''
+  try {
+    const res = await adminApi.getUserActivity(userId)
+    const data = res?.data || res
+    const items = data?.items || []
+    activities.value = items.map(mapActivity)
+    activitiesLoaded.value = true
+  } catch (err) {
+    activitiesError.value = err.message || '活动记录加载失败'
+    activities.value = []
+    activitiesLoaded.value = true
+  } finally {
+    activitiesLoading.value = false
+  }
+}
+
 onMounted(() => {
   fetchUserDetail()
+  // 并行拉真实活动日志（独立状态，慢不阻塞整页）
+  fetchUserActivity()
 })
 
 // ============ Actions ============
-async function handleResetPassword() {
-  if (!confirm('确定要重置该用户的密码吗？\n\n重置后该用户的加密内容将不可访问。')) return
-
+async function confirmResetPassword() {
+  // 二次确认弹窗确认按钮触发实际重置
+  showResetConfirm.value = false
   actionLoading.value = true
   try {
     const res = await adminApi.resetPassword(userId)
@@ -156,7 +213,7 @@ function maskPhone(phone) {
           <button
             :class="styles.actionBtnWarning"
             :disabled="actionLoading"
-            @click="handleResetPassword"
+            @click="openResetConfirm"
           >
             {{ actionLoading ? '处理中...' : '重置密码' }}
           </button>
@@ -175,9 +232,20 @@ function maskPhone(phone) {
       <!-- Recent Activity Log -->
       <div :class="styles.card">
         <h3 :class="styles.sectionTitle">最近活动</h3>
-        <div v-if="activities.length === 0" :class="styles.emptyLog">
+
+        <!-- 独立 loading（不影响用户详情主体） -->
+        <div v-if="activitiesLoading" :class="styles.activityLoading">
+          活动加载中...
+        </div>
+
+        <div v-else-if="activitiesError" :class="styles.emptyLog">
+          {{ activitiesError }}
+        </div>
+
+        <div v-else-if="activities.length === 0" :class="styles.emptyLog">
           暂无活动记录
         </div>
+
         <div v-else :class="styles.activityList">
           <div v-for="(activity, i) in activities" :key="i" :class="styles.activityItem">
             <span :class="styles.activityIcon">{{ activity.icon }}</span>
@@ -185,6 +253,22 @@ function maskPhone(phone) {
               <p :class="styles.activityText">{{ activity.text }}</p>
               <p :class="styles.activityTime">{{ formatDate(activity.time) }}</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 重置密码二次确认弹窗（红字强警告） -->
+      <div v-if="showResetConfirm" :class="styles.confirmOverlay" @click.self="cancelResetConfirm">
+        <div :class="styles.confirmDialog" role="dialog" aria-modal="true">
+          <h3 :class="styles.confirmTitle">重置密码</h3>
+          <p :class="styles.confirmDanger">
+            ⚠️ 重置后该用户的所有历史日记将<strong>永久无法恢复</strong>（无法读取）。确定继续吗？
+          </p>
+          <div :class="styles.confirmBtns">
+            <button :class="styles.confirmCancel" @click="cancelResetConfirm">取消</button>
+            <button :class="styles.confirmOk" :disabled="actionLoading" @click="confirmResetPassword">
+              {{ actionLoading ? '处理中...' : '确认重置' }}
+            </button>
           </div>
         </div>
       </div>

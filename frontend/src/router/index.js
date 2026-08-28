@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useAppStore } from '../stores/app'
+import { activityApi } from '../api/activity'
 import adminRoutes from './admin'
 
 const routes = [
@@ -95,6 +96,16 @@ router.beforeEach(async (to, from, next) => {
   }
 
   next()
+})
+
+// A2: 登录态路由切换埋点 page_view（DD-A2）
+router.afterEach((to) => {
+  // 仅登录用户上报；匿名不发（DD-A2.2），避免污染 DAU
+  const authStore = useAuthStore()
+  if (!authStore.isLoggedIn) return
+
+  // 失败零影响（DD-A2.4）：吞掉错误，不阻塞渲染/读写
+  activityApi.reportPageView(to.fullPath).catch(() => {})
 })
 
 export default router

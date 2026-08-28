@@ -19,6 +19,9 @@ router.get('/users', adminController.listUsers)
 // GET /api/admin/users/:id - 用户详情
 router.get('/users/:id', adminController.getUser)
 
+// GET /api/admin/users/:id/activity - 按用户查活动日志（admin 权限由上方 router.use 统一继承）
+router.get('/users/:id/activity', adminController.getUserActivity)
+
 // POST /api/admin/users/:id/reset-password - 重置用户密码
 router.post('/users/:id/reset-password', adminController.resetPassword)
 

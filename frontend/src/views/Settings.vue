@@ -265,6 +265,10 @@ function handleReset() {
           />
         </div>
 
+        <p :class="styles.fieldHint">
+          <strong>提示：</strong>修改密码后，历史日记将<strong>重新加密并可正常读取</strong>；但若丢失新密码，历史日记将无法恢复。
+        </p>
+
         <p v-if="passwordError" :class="styles.error">{{ passwordError }}</p>
         <p v-if="passwordSuccess" :class="styles.success">{{ passwordSuccess }}</p>
 

@@ -11,3 +11,6 @@ dist/
 .vscode/
 *.swp
 *~
+
+# better-sqlite3 升级临时备份（不属于本次变更）
+backend/package.json.bak

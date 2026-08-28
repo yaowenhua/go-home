@@ -21,6 +21,7 @@ const usersRouter = require('./routes/users')
 const authRoutes = require('./routes/auth')
 const adminRoutes = require('./routes/admin')
 const statsRoutes = require('./routes/stats')
+const activityRoutes = require('./routes/activity')
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -45,6 +46,9 @@ app.use('/api/admin', adminRoutes)
 
 // Stats routes (auth + admin required via router-level middleware)
 app.use('/api/stats', statsRoutes)
+
+// Activity routes (auth required via router-level middleware; page_view inbound)
+app.use('/api/activity', activityRoutes)
 
 // 404 handler
 app.use((req, res) => {

@@ -232,6 +232,13 @@
   margin: 0 0 16px;
 }
 
+.activityLoading {
+  text-align: center;
+  padding: 30px;
+  color: #999;
+  font-size: 14px;
+}
+
 .emptyLog {
   text-align: center;
   padding: 30px;
@@ -281,4 +288,89 @@
   font-size: 12px;
   color: #bbb;
   margin: 2px 0 0;
+}
+
+/* 重置密码二次确认弹窗（红字强警告，DD-A1.5） */
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.confirmDialog {
+  background: #fff;
+  border-radius: 12px;
+  max-width: 420px;
+  width: 100%;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.confirmTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 14px;
+}
+
+/* 红字强警告 */
+.confirmDanger {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #e74c3c;
+  background: #fef0ef;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 0 0 18px;
+}
+
+.confirmDanger strong {
+  color: #c0392b;
+  font-weight: 800;
+}
+
+.confirmBtns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirmCancel {
+  padding: 8px 18px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.confirmCancel:hover {
+  background: #f5f5f5;
+}
+
+.confirmOk {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirmOk:hover {
+  background: #c0392b;
+}
+
+.confirmOk:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

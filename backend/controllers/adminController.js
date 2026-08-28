@@ -342,6 +342,69 @@ async function getDauTrend(req, res, next) {
   }
 }
 
+/**
+ * GET /api/admin/users/:id/activity - 按用户查活动日志（后台行为元数据，不含日记明文）
+ * Query: { limit } 默认 20，上限 100
+ * 只读 activity_log 表，天然不含 entries.content / content_encrypted（DD-B1.3）。
+ */
+async function getUserActivity(req, res, next) {
+  try {
+    const db = getDb()
+    const { id } = req.params
+
+    const user = db.prepare('SELECT id FROM users WHERE id = ?').get(id)
+    if (!user) {
+      return next(createError(404, '用户不存在'))
+    }
+
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20))
+
+    const rows = db
+      .prepare(`
+        SELECT id, event_type, path, metadata, created_at
+        FROM activity_log
+        WHERE user_id = ?
+        ORDER BY id DESC
+        LIMIT ?
+      `)
+      .all(id, limit)
+
+    const total = db
+      .prepare('SELECT COUNT(*) as c FROM activity_log WHERE user_id = ?')
+      .get(id).c
+
+    const items = rows.map((row) => {
+      let metadata = {}
+      if (row.metadata) {
+        try {
+          metadata = JSON.parse(row.metadata)
+        } catch {
+          metadata = {} // 容错：非法 JSON 给空对象，前端不崩
+        }
+      }
+      return {
+        id: row.id,
+        event_type: row.event_type,
+        path: row.path,
+        metadata,
+        created_at: row.created_at,
+      }
+    })
+
+    res.json({
+      success: true,
+      data: {
+        userId: id,
+        total,
+        limit,
+        items,
+      },
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   listUsers,
   getUser,
@@ -349,4 +412,5 @@ module.exports = {
   toggleUserStatus,
   getStatsOverview,
   getDauTrend,
+  getUserActivity,
 }

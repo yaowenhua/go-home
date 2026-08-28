@@ -128,13 +128,15 @@ async function create(req, res, next) {
       contentEncrypted = cryptoService.encrypt(content, req.encryptionKey)
     }
 
+    // content 列在 V1 schema 为 NOT NULL 且不可 DROP（产品禁令），故写入空串 '' 占位而非明文；
+    // 真实内容只进 content_encrypted（DD-A1.2）。空串非明文，DD-A1.1 判定（TRIM != ''）不受影响。
     const stmt = db.prepare(
       'INSERT INTO entries (id, user_id, content, content_encrypted, rating, category, entry_date, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     )
     stmt.run(
       String(newId),
       userId,
-      content,        // 保留明文 content 字段做降级兼容
+      '',
       contentEncrypted,
       rating || 3,
       category || 'life',
@@ -176,7 +178,8 @@ async function update(req, res, next) {
       return next(createError(403, '无权修改该日记'))
     }
 
-    const fields = ['content', 'rating', 'category', 'entry_date']
+    // 只更新非明文字段；content 变更仅通过 content_encrypted 加密分支处理（见下）
+    const fields = ['rating', 'category', 'entry_date']
     const updates = []
     const values = []
 
@@ -246,20 +249,29 @@ async function remove(req, res, next) {
 
 /**
  * 解密单条日记
+ *
+ * V2：不再回退 DB 明文。
+ * - content_encrypted 为空行 → content = null（前端需承载）
+ * - content_encrypted 解密失败 → content = '（无法解密）' 占位 + decryptFailed: true，
+ *   绝不返回 DB 明文（明文已从 DB 退出，DD-A1.2/1.3）。
  */
 function decryptEntry(row, encryptionKey) {
   if (!row) return null
 
   const result = { ...row }
 
-  // 如果有加密内容且提供了解密密钥，解密
+  // 有加密内容且提供了解密密钥时解密；否则置空/占位
   if (result.content_encrypted && encryptionKey) {
     try {
       result.content = cryptoService.decrypt(result.content_encrypted, encryptionKey)
     } catch (e) {
       console.warn(`[Entry] Failed to decrypt entry ${result.id}: ${e.message}`)
-      // 保留原始 content 字段作为降级
+      result.content = '（无法解密）'
+      result.decryptFailed = true
     }
+  } else {
+    // 无密文或无密钥：不伪造明文，置空（前端 EntryCard 显示占位/空态）
+    result.content = null
   }
 
   // 不向客户端暴露加密字段

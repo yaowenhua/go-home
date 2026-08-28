@@ -9,6 +9,10 @@ export const adminApi = {
   getUser: (id) =>
     apiClient.get(`/admin/users/${id}`),
 
+  /** GET /api/admin/users/:id/activity — 用户活动日志（B1） */
+  getUserActivity: (userId, params = { limit: 20 }) =>
+    apiClient.get(`/admin/users/${userId}/activity`, { params }),
+
   /** POST /api/admin/users/:id/reset-password — 重置密码 */
   resetPassword: (userId) =>
     apiClient.post(`/admin/users/${userId}/reset-password`),
