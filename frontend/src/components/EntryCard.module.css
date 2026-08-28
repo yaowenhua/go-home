@@ -1,11 +1,16 @@
 .card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-md);
-  margin-bottom: var(--space-md);
-  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
   animation: slideUp 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .card:active {
@@ -22,7 +27,7 @@
 .category {
   display: inline-block;
   padding: 2px 10px;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   color: #fff;
   font-weight: 500;
@@ -31,7 +36,7 @@
 
 .content {
   font-size: var(--font-size-md);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-text);
   margin-bottom: var(--space-sm);
   word-break: break-word;

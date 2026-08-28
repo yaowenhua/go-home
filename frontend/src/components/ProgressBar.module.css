@@ -31,7 +31,8 @@
 .fill {
   height: 100%;
   border-radius: 4px;
-  transition: width 1s ease, background-color 0.5s ease;
+  background: linear-gradient(90deg, #E0A46E, #C97B3D);
+  transition: width 1s ease;
   position: relative;
   overflow: hidden;
 }
@@ -52,11 +53,11 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--color-text);
-  border: 2px solid var(--color-bg);
+  background: #fff;
+  border: 3px solid var(--color-primary);
   transform: translate(-50%, -50%);
   transition: left 1s ease;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 6px rgba(201, 123, 61, 0.3);
 }
 
 .percentage {

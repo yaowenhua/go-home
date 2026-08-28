@@ -9,13 +9,6 @@ const props = defineProps({
 })
 
 const clampedProgress = computed(() => Math.min(100, Math.max(0, props.progress)))
-
-const barColor = computed(() => {
-  if (clampedProgress.value > 75) return 'var(--color-danger)'
-  if (clampedProgress.value > 50) return 'var(--color-warning)'
-  if (clampedProgress.value > 25) return 'var(--color-info)'
-  return 'var(--color-success)'
-})
 </script>
 
 <template>
@@ -31,7 +24,7 @@ const barColor = computed(() => {
     <div :class="styles.track">
       <div
         :class="styles.fill"
-        :style="{ width: `${clampedProgress}%`, backgroundColor: barColor }"
+        :style="{ width: `${clampedProgress}%` }"
       >
         <div :class="styles.glow" />
       </div>

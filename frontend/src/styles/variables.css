@@ -1,37 +1,41 @@
 :root {
-  /* Colors */
-  --color-primary: #ff4757;
-  --color-primary-light: #ff6b6b;
-  --color-primary-dark: #c0392b;
+  /* 主色：日落琥珀（替代 #ff4757 鲜红） */
+  --color-primary: #C97B3D;
+  --color-primary-light: #E0A46E;
+  --color-primary-dark: #A05F2B;
 
-  --color-bg: #0f0f23;
-  --color-bg-card: #1a1a2e;
-  --color-bg-card-hover: #16213e;
-  --color-bg-elevated: #1e2a4a;
+  /* 背景：暖米纸（替代暗蓝 #0f0f23） */
+  --color-bg: #F7F1E7;
+  --color-bg-card: #FFFCF5;
+  --color-bg-card-hover: #FBF3E6;
+  --color-bg-elevated: #FFF7EA;
 
-  --color-text: #e8e8e8;
-  --color-text-secondary: #a0a0b0;
-  --color-text-muted: #6c6c80;
+  /* 文字：暖墨 */
+  --color-text: #3A3630;
+  --color-text-secondary: #8A8177;
+  --color-text-muted: #B7AFA3;
 
-  --color-border: #2a2a4a;
-  --color-border-light: #3a3a5a;
+  /* 边框 */
+  --color-border: #EBE0CE;
+  --color-border-light: #F3EBDD;
 
-  --color-star: #f1c40f;
-  --color-star-empty: #3a3a5a;
-  --color-star-hover: #f39c12;
+  /* 星标 */
+  --color-star: #E4B04A;
+  --color-star-empty: #E5DCCB;
+  --color-star-hover: #D9A05E;
 
-  --color-success: #2ecc71;
-  --color-warning: #e67e22;
-  --color-danger: #e74c3c;
-  --color-info: #3498db;
+  --color-success: #7A9E7E;
+  --color-warning: #D9A05E;
+  --color-danger: #C06B5A;
+  --color-info: #7C9BA6;
 
-  /* Category colors */
-  --color-work: #3498db;
-  --color-study: #9b59b6;
-  --color-life: #2ecc71;
-  --color-health: #e74c3c;
-  --color-entertainment: #f39c12;
-  --color-other: #95a5a6;
+  /* Category colors，低饱和、统一暖调 */
+  --color-work: #7C9BA6;
+  --color-study: #9B8FB8;
+  --color-life: #7A9E7E;
+  --color-health: #C06B5A;
+  --color-entertainment: #D9A05E;
+  --color-other: #A8A096;
 
   /* Spacing */
   --space-xs: 4px;
@@ -45,6 +49,7 @@
   --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial,
     sans-serif;
+  --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
 
   --font-size-xs: 12px;
   --font-size-sm: 14px;
@@ -63,11 +68,11 @@
   --radius-xl: 24px;
   --radius-full: 50%;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 20px rgba(255, 71, 87, 0.3);
+  /* Shadows，暖棕替代纯黑重影 */
+  --shadow-sm: 0 1px 2px rgba(122, 96, 62, 0.06);
+  --shadow-md: 0 2px 8px rgba(122, 96, 62, 0.08);
+  --shadow-lg: 0 6px 20px rgba(122, 96, 62, 0.12);
+  --shadow-glow: 0 4px 18px rgba(201, 123, 61, 0.18);
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -86,26 +91,7 @@
   --z-toast: 400;
 }
 
-/* Light mode support - ready for future theme toggle */
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-bg: #f5f6fa;
-    --color-bg-card: #ffffff;
-    --color-bg-card-hover: #f0f1f5;
-    --color-bg-elevated: #ffffff;
-
-    --color-text: #2d3436;
-    --color-text-secondary: #636e72;
-    --color-text-muted: #b2bec3;
-
-    --color-border: #dfe6e9;
-    --color-border-light: #e9ecef;
-
-    --color-star-empty: #dfe6e9;
-
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
-    --shadow-glow: 0 0 20px rgba(255, 71, 87, 0.15);
-  }
-}
+/*
+ * 暖色（浅）主方案。原 prefers-color-scheme: light 覆盖段已移除——
+ * 深色暗蓝主题与新的暖米底冲突（见 home-handoff.md §1），本次只交付浅色暖主方案。
+ */

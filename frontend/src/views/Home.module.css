@@ -31,29 +31,53 @@
 .hero {
   text-align: center;
   padding: var(--space-xl) 0;
+  position: relative;
   animation: slideUp 0.5s ease;
 }
 
+/* 落日光晕（照搬 home-prototype.html .hero::before） */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  width: 320px;
+  height: 320px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(232, 196, 142, 0.55) 0%, rgba(232, 196, 142, 0) 70%);
+  filter: blur(8px);
+  z-index: 0;
+  pointer-events: none;
+}
+
 .remainingLabel {
+  position: relative;
+  z-index: 1;
   font-size: var(--font-size-md);
   color: var(--color-text-secondary);
   margin-bottom: var(--space-sm);
-  letter-spacing: 2px;
+  letter-spacing: 6px;
 }
 
 .remainingNumber {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-serif);
   font-size: var(--font-size-hero);
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, #ffa502 100%);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #D89A5C 45%, var(--color-primary-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  line-height: 1.1;
+  line-height: 1.05;
   padding: var(--space-sm) 0;
-  letter-spacing: -2px;
 }
 
 .remainingUnit {
+  position: relative;
+  z-index: 1;
   font-size: var(--font-size-xl);
   color: var(--color-text-secondary);
   margin-top: var(--space-xs);
@@ -88,6 +112,7 @@
 .entryList {
   display: flex;
   flex-direction: column;
+  gap: var(--space-md);
 }
 
 .empty {
@@ -142,14 +167,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  box-shadow: var(--shadow-glow), 0 8px 24px rgba(201, 123, 61, 0.28);
   z-index: var(--z-sticky);
   transition: all var(--transition-fast);
 }
 
 .fab:hover {
   transform: scale(1.1) translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 71, 87, 0.4);
+  box-shadow: 0 8px 24px rgba(201, 123, 61, 0.4);
 }
 
 .fab:active {
