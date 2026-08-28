@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>返乡日记 · Home 视觉原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* 配色 */
+    --color-primary: #C97B3D;
+    --color-primary-light: #E0A46E;
+    --color-primary-dark: #A05F2B;
+
+    --color-bg: #F7F1E7;
+    --color-bg-card: #FFFCF5;
+    --color-bg-card-hover: #FBF3E6;
+
+    --color-text: #3A3630;
+    --color-text-secondary: #8A8177;
+    --color-text-muted: #B7AFA3;
+
+    --color-border: #EBE0CE;
+    --color-border-light: #F3EBDD;
+
+    --color-star: #E4B04A;
+    --color-star-empty: #E5DCCB;
+
+    --color-danger: #C06B5A;
+
+    /* 分类色 */
+    --color-work: #7C9BA6;
+    --color-study: #9B8FB8;
+    --color-life: #7A9E7E;
+    --color-health: #C06B5A;
+    --color-entertainment: #D9A05E;
+    --color-other: #A8A096;
+
+    /* 间距 */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 14px;
+    --space-lg: 24px;
+    --space-xl: 36px;
+    --space-2xl: 56px;
+
+    /* 字体 */
+    --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+      'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 20px;
+    --font-size-xl: 26px;
+    --font-size-hero: clamp(4rem, 22vw, 9rem);
+
+    /* 圆角 */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+    --radius-full: 999px;
+
+    /* 阴影 */
+    --shadow-sm: 0 1px 2px rgba(122, 96, 62, 0.06);
+    --shadow-md: 0 2px 8px rgba(122, 96, 62, 0.08);
+    --shadow-lg: 0 6px 20px rgba(122, 96, 62, 0.12);
+    --shadow-glow: 0 4px 18px rgba(201, 123, 61, 0.18);
+
+    --max-width: 600px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.7;
+    min-height: 100vh;
+    /* 纸纹噪点 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  button { font-family: inherit; cursor: pointer; border: none; background: none; outline: none; }
+
+  /* ========== 页面容器 ========== */
+  .page {
+    min-height: 100vh;
+    padding: var(--space-lg) 20px calc(88px + 24px);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ========== Header ========== */
+  .header { text-align: center; margin-bottom: var(--space-md); }
+
+  .birthday-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #E8C48E, #D9A05E);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-md);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .greeting {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    letter-spacing: 0.02em;
+  }
+
+  /* ========== Hero 倒计时 ========== */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: var(--space-xl) 0 var(--space-lg);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 320px;
+    height: 320px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(232, 196, 142, 0.55) 0%, rgba(232, 196, 142, 0) 70%);
+    filter: blur(8px);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .remaining-label {
+    position: relative;
+    z-index: 1;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    letter-spacing: 6px;
+    margin-bottom: 4px;
+  }
+
+  .remaining-number {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-serif);
+    font-size: var(--font-size-hero);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #C97B3D 0%, #D89A5C 45%, #E0A46E 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    padding: 8px 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .remaining-unit {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-serif);
+    font-size: var(--font-size-xl);
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+    letter-spacing: 4px;
+  }
+
+  .hero-line {
+    position: relative;
+    z-index: 1;
+    width: 56px;
+    height: 1px;
+    background: var(--color-border);
+    margin: 18px auto 0;
+  }
+
+  /* ========== 进度条 ========== */
+  .progress-section {
+    margin: 0 0 var(--space-xl);
+    padding: 0 4px;
+  }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .progress-labels strong { color: var(--color-text); font-weight: 600; }
+
+  .track {
+    position: relative;
+    height: 6px;
+    background: var(--color-border-light);
+    border-radius: var(--radius-full);
+    overflow: visible;
+  }
+
+  .fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: linear-gradient(90deg, #E0A46E, #C97B3D);
+    position: relative;
+    transition: width 1.2s ease;
+  }
+
+  .dot {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--color-primary);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 1px 4px rgba(122, 96, 62, 0.2);
+    transition: left 1.2s ease;
+  }
+
+  .percentage {
+    display: block;
+    text-align: center;
+    margin-top: var(--space-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    letter-spacing: 1px;
+  }
+
+  /* ========== 分区标题 ========== */
+  .entries-section { margin-bottom: var(--space-lg); }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+  }
+
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
+  }
+
+  .section-count {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* ========== 日记卡片 ========== */
+  .entry-list { display: flex; flex-direction: column; gap: var(--space-md); }
+
+  .card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+  }
+
+  .category {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #fff;
+  }
+
+  .category em {
+    font-style: normal;
+    font-size: 12px;
+  }
+
+  .stars {
+    display: inline-flex;
+    gap: 2px;
+    color: var(--color-star);
+    font-size: 15px;
+    letter-spacing: 1px;
+  }
+
+  .stars .off { color: var(--color-star-empty); }
+
+  .card-content {
+    font-size: var(--font-size-md);
+    line-height: 1.7;
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .card-actions { display: flex; gap: var(--space-xs); }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    color: var(--color-text-muted);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .action-btn:hover { background: var(--color-bg-card-hover); color: var(--color-text-secondary); }
+  .action-btn.delete:hover { background: rgba(192, 107, 90, 0.14); color: var(--color-danger); }
+
+  /* ========== FAB ========== */
+  .fab {
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    width: 58px;
+    height: 58px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, #C97B3D 0%, #E0A46E 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-glow), 0 8px 24px rgba(201, 123, 61, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .fab:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(201, 123, 61, 0.36); }
+  .fab:active { transform: scale(0.96); }
+
+  @media (min-width: 640px) {
+    .fab { right: calc(50% - 300px + 24px); }
+  }
+
+  .fade-up { animation: fadeUp 0.6s ease both; }
+  .fade-up.d1 { animation-delay: 0.05s; }
+  .fade-up.d2 { animation-delay: 0.1s; }
+  .fade-up.d3 { animation-delay: 0.15s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="header fade-up">
+      <div class="birthday-banner">🎂 生日快乐！</div>
+      <p class="greeting">傍晚好，今天也辛苦了 🌆</p>
+    </div>
+
+    <!-- Hero 倒计时 -->
+    <section class="hero fade-up d1">
+      <p class="remaining-label">余 生 还 剩</p>
+      <div class="remaining-number">12,345</div>
+      <p class="remaining-unit">天</p>
+      <div class="hero-line"></div>
+    </section>
+
+    <!-- 进度条 -->
+    <section class="progress-section fade-up d2">
+      <div class="progress-labels">
+        <span>已过 <strong>7,890</strong> 天</span>
+        <span>约 <strong>20,235</strong> 天</span>
+      </div>
+      <div class="track">
+        <div class="fill" style="width: 39%;">
+          <div class="dot" style="left: 39%;"></div>
+        </div>
+      </div>
+      <span class="percentage">已走过 39.0% 的人生</span>
+    </section>
+
+    <!-- 今日记录 -->
+    <section class="entries-section fade-up d3">
+      <div class="section-header">
+        <h2 class="section-title">今日记录</h2>
+        <span class="section-count">3 条记录</span>
+      </div>
+
+      <div class="entry-list">
+        <!-- 卡片 1 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="category" style="background:#7A9E7E;"><em>🌿</em> 生活</span>
+            <span class="stars">★★★★<span class="off">★</span></span>
+          </div>
+          <p class="card-content">下午回家的小路上，看见一片晚霞落在麦田上，风很轻，突然觉得一切都有了答案。</p>
+          <div class="card-footer">
+            <span class="card-time">17:26</span>
+            <div class="card-actions">
+              <button class="action-btn" aria-label="编辑">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="action-btn delete" aria-label="删除">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片 2 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="category" style="background:#7C9BA6;"><em>💼</em> 工作</span>
+            <span class="stars">★★★<span class="off">★★</span></span>
+          </div>
+          <p class="card-content">把手头那个方案终于收尾了。不算完美，但今天可以早点睡。</p>
+          <div class="card-footer">
+            <span class="card-time">14:02</span>
+            <div class="card-actions">
+              <button class="action-btn" aria-label="编辑">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="action-btn delete" aria-label="删除">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片 3 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="category" style="background:#9B8FB8;"><em>📚</em> 学习</span>
+            <span class="stars">★★★★★</span>
+          </div>
+          <p class="card-content">读完了那本一直想读的书，最后一段话读了三遍。</p>
+          <div class="card-footer">
+            <span class="card-time">09:40</span>
+            <div class="card-actions">
+              <button class="action-btn" aria-label="编辑">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="action-btn delete" aria-label="删除">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAB -->
+    <button class="fab" aria-label="添加记录">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+    </button>
+  </div>
+</body>
+</html>
