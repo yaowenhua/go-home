@@ -1,14 +1,15 @@
 .layout {
   display: flex;
   min-height: 100vh;
-  background: #f0f2f5;
+  background: var(--color-bg);
 }
 
 /* Sidebar */
 .sidebar {
   width: 240px;
-  background: #1a1a2e;
-  color: #fff;
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border);
+  color: var(--color-text);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -22,7 +23,7 @@
   align-items: center;
   gap: 10px;
   padding: 24px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .sidebarLogo {
@@ -32,6 +33,7 @@
 .sidebarTitle {
   font-size: 18px;
   font-weight: 700;
+  color: var(--color-text);
 }
 
 .sidebarNav {
@@ -49,7 +51,7 @@
   padding: 12px 16px;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   font-size: 15px;
   border-radius: 10px;
   cursor: pointer;
@@ -59,13 +61,13 @@
 }
 
 .navItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
 }
 
 .navItemActive {
-  background: rgba(102, 126, 234, 0.25);
-  color: #fff;
+  background: rgba(201, 123, 61, 0.14);
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -81,7 +83,7 @@
 
 .sidebarFooter {
   padding: 16px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -89,9 +91,9 @@
 
 .backBtn {
   padding: 10px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
@@ -100,8 +102,8 @@
 }
 
 .backBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: var(--color-bg-elevated);
+  color: var(--color-text);
 }
 
 .adminInfo {
@@ -114,15 +116,15 @@
 .adminBadge {
   font-size: 11px;
   padding: 2px 8px;
-  background: rgba(102, 126, 234, 0.3);
-  color: #a8b8ff;
+  background: rgba(201, 123, 61, 0.14);
+  color: var(--color-primary);
   border-radius: 10px;
   font-weight: 600;
 }
 
 .adminName {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

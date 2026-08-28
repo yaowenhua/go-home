@@ -12,19 +12,19 @@
 .title {
   font-size: 22px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
   margin: 0;
 }
 
 .subtitle {
   font-size: 14px;
-  color: #888;
+  color: var(--color-text-secondary);
   margin: 4px 0 0;
 }
 
 .error {
-  color: #e74c3c;
-  background: #fef0ef;
+  color: var(--color-danger);
+  background: rgba(192, 107, 90, 0.1);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 14px;
@@ -33,7 +33,7 @@
 
 .loading {
   text-align: center;
-  color: #999;
+  color: var(--color-text-muted);
   padding: 60px;
   font-size: 14px;
 }
@@ -47,22 +47,22 @@
 }
 
 .card {
-  background: #fff;
+  background: var(--color-bg-card);
   border-radius: 12px;
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .cardHighlight {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   color: #fff;
 }
 
 .cardHighlight .cardLabel {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .cardHighlight .cardValue {
@@ -76,13 +76,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.03);
+  background: rgba(0, 0, 0, 0.04);
   border-radius: 12px;
   flex-shrink: 0;
 }
 
 .cardHighlight .cardIcon {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .cardInfo {
@@ -94,14 +94,14 @@
 .cardValue {
   font-size: 28px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
   margin: 0;
   line-height: 1.1;
 }
 
 .cardLabel {
   font-size: 13px;
-  color: #999;
+  color: var(--color-text-muted);
   margin: 0;
 }
 
@@ -120,22 +120,22 @@
 .sectionTitle {
   font-size: 16px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--color-text);
   margin: 0 0 12px;
 }
 
 /* Trend Chart */
 .trendCard {
-  background: #fff;
+  background: var(--color-bg-card);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .emptyTrend {
   text-align: center;
   padding: 40px;
-  color: #bbb;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -151,7 +151,7 @@
   justify-content: space-between;
   padding: 0 8px 20px 0;
   font-size: 11px;
-  color: #bbb;
+  color: var(--color-text-muted);
   min-width: 24px;
   text-align: right;
 }
@@ -161,8 +161,8 @@
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  border-left: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  border-left: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
   padding-left: 4px;
   padding-bottom: 0;
   overflow-x: auto;
@@ -183,7 +183,7 @@
 .bar {
   width: 100%;
   max-width: 28px;
-  background: linear-gradient(180deg, #667eea 0%, #8899ee 100%);
+  background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
   border-radius: 4px 4px 0 0;
   transition: height 0.3s;
   position: relative;
@@ -191,7 +191,7 @@
 }
 
 .barToday {
-  background: linear-gradient(180deg, #764ba2 0%, #9655c4 100%);
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
 }
 
 .barValue {
@@ -200,14 +200,14 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 10px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-weight: 600;
   white-space: nowrap;
 }
 
 .barDate {
   font-size: 10px;
-  color: #bbb;
+  color: var(--color-text-muted);
   margin-top: 4px;
   white-space: nowrap;
   transform: rotate(-30deg);
@@ -222,22 +222,22 @@
 }
 
 .todayItem {
-  background: #fff;
+  background: var(--color-bg-card);
   border-radius: 12px;
   padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .todayLabel {
   font-size: 13px;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .todayValue {
   font-size: 24px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
 }
