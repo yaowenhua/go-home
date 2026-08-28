@@ -59,7 +59,7 @@
   --font-size-2xl: 32px;
   --font-size-3xl: 48px;
   --font-size-4xl: 64px;
-  --font-size-hero: clamp(3rem, 15vw, 7rem);
+  --font-size-hero: clamp(4rem, 22vw, 9rem);
 
   /* Border radius */
   --radius-sm: 6px;

@@ -13,7 +13,7 @@
 }
 
 .birthdayBanner {
-  background: linear-gradient(135deg, #f39c12, #e74c3c);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
   color: #fff;
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
